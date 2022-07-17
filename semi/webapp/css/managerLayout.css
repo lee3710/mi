@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+/*body*/
+*{margin:0px;}
+body{width:1000px; margin:0px auto; background-color:black; color:white;
+	font-family:"Comic Sans MS"; font-size:15px;}
+
+
+/*header*/
+h1{text-align:center; font-size:35px; width:200px; 	margin:0px auto;}
+#home{text-align:right;  font-size: 20px;}
+
+/*menu*/
+.mfoot{float:left;}
+.menu{width:200px; margin-left:0px; }
+.menu ul{list-style:none;	
+		font-size:20px;	
+		line-height:100px;	
+		color:white;	
+		float:left;	}
+		
+
+/* section, article */
+.center{width:800px; float:right; min-height:600px;}
+.ma1{height:80px;}
+.ma2{min-height:440px;}
+.ma3{height:80px;}
+.ma2 table{
+border-top:1px solid gray;
+border-bottom:1px solid gray;
+transform:rotate(0.04deg);
+margin:0px auto;
+width:800px;
+height:400px;
+}
+
+
+/* footer */
+.ftable{	width:1000px;	margin:0px auto; text-align:left;	color:gray;}
+.ftable th{text-align:left;} 
+#tel{font-size:35px;}
+.ftable td{font-size:15px;}
+
+
+/*h2, a, page*/
+h2{text-align:center; font-size:30px; }
+a{text-decoration: none; color:white;}
+#page{text-align:center;}
+
+
+/* input type button/select  */
+.button {
+width:80px;
+height:25px;
+background-color: black;
+color: white;
+border-radius: 15%;
+font-size: 15px;
+font-family: "Comic Sans MS";	
+}
+
+select{
+height:25px;
+font-size:15px;
+}
+
+

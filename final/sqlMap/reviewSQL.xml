@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="hobbycam.review">
+  <select id="myreview" parameterType="Map" resultType="com.hobbycam.review.model.ReviewVO">
+	
+	 select * from
+		(select rownum as rnum, E.* from
+		(SELECT
+		    D.*,
+		    T.T_NAME
+				FROM
+				    (SELECT
+				        C.*
+				    FROM
+				        (SELECT
+				            B.*,
+				            LL.T_IDX,
+				            LL.LESSON_SUBJ,
+				            LL.LESSON_THUMBNAIL
+				        FROM
+				            (SELECT
+				                A.*,
+				                LS.LESSON_IDX
+				            FROM    
+				                (SELECT 
+				                    R.*,
+				                    LR.LESSON_SCHEDULE_IDX,
+				                    LR.U_IDX
+				                FROM 
+				                    REVIEW R,
+				                    LESSON_RECORD LR
+				                WHERE
+				                    R.LESSON_RECORD_IDX=LR.LESSON_RECORD_IDX)A,
+				                    LESSON_SCHEDULE LS
+				            WHERE
+				                A.LESSON_SCHEDULE_IDX=LS.LESSON_SCHEDULE_IDX)B,
+				                LESSON_LIST LL
+				        WHERE
+				            B.LESSON_IDX=LL.LESSON_IDX)C
+				    WHERE U_IDX=#{u_idx})D,
+				    TEACHER T
+			WHERE D.T_IDX=T.T_IDX
+			
+			ORDER BY D.REVIEW_DATE DESC)E
+					)F
+					
+		where rnum<![CDATA[>=]]>#{start} 
+	and rnum<![CDATA[<=]]>#{end} 
+	
+  </select> 
+  
+
+  
+  <select id="myunreview"  parameterType="Map" resultType="com.hobbycam.review.model.ReviewVO">
+  	
+  	 select * from
+		(select rownum as rnum, E.* from
+		(
+  	
+  	
+  	select c.*,
+    t.t_name
+		from
+		(select b.*,
+		        ll.t_idx, 
+		        ll.lesson_subj,
+		        ll.lesson_thumbnail
+		        
+		        from 
+		       (select a.*,
+		                lesson_idx 
+		            from 
+		                (select a.lesson_record_idx, a.lesson_schedule_idx
+		                    from lesson_record a
+		                    left outer join review b
+		                    on a.lesson_record_idx=b.lesson_record_idx
+		                    where b.lesson_record_idx is null
+		                        and a.u_idx=#{u_idx})a,
+		                LESSON_SCHEDULE LS
+		            WHERE
+		                A.LESSON_SCHEDULE_IDX=LS.LESSON_SCHEDULE_IDX)b,
+		            Lesson_list ll
+		            
+		       where b.lesson_idx=ll.lesson_idx)c,
+		              teacher t
+		where c.t_idx=t.t_idx
+		
+		)E
+					)F
+					
+		where rnum<![CDATA[>=]]>#{start} 
+	and rnum<![CDATA[<=]]>#{end} 
+	
+  </select>
+  
+  <select id="selectMyreviewCnt"  parameterType="int" resultType="int">
+	select count(*) from review 
+	where review.lesson_record_idx In(
+		select lesson_record_idx from lesson_record
+		where lesson_record.u_idx=#{u_idx})
+  
+  </select>
+  
+  
+  <select id="selectMyunreviewCnt"  parameterType="int" resultType="int">
+  	select count(*)
+      from lesson_record a
+      	left outer join review b
+      on a.lesson_record_idx=b.lesson_record_idx
+      where b.lesson_record_idx is null
+          and a.u_idx=#{u_idx}
+
+  </select>
+  
+  
+  <insert id="insertReview" parameterType="com.hobbycam.review.model.ReviewDTO">
+		insert into review values
+			(seq_review.nextval, 
+			#{lesson_record_idx},
+			#{star_point},
+			#{review_cont},
+			sysdate)
+  </insert>
+
+
+	<update id="updateReview" parameterType="com.hobbycam.review.model.ReviewDTO">
+	update review set
+	    	 star_point=#{star_point},
+			review_cont=#{review_cont}
+		
+	where review_idx=#{review_idx}
+	</update>
+	
+	
+	<delete id="deleteReview" parameterType="int">
+	delete review 
+		 where review_idx=#{review_idx}
+	</delete>
+  
+  </mapper>
